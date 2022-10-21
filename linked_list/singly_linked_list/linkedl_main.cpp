@@ -6,7 +6,5 @@ int main(){
     l1.insertatBegin(32);
     l1.insertatEnd(100);
     l1.display();
-    l1.delhead();
-    l1.display();
 
 }

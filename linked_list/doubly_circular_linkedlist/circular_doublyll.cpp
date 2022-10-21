@@ -1,18 +1,5 @@
-#include <iostream>
+#include "NODE2.cpp"
 using namespace std;
-
-class Node{
-    public:
-    int data;
-    Node* next;
-    Node* prev;
-
-    Node(int x){
-        data = x;
-        next = NULL;
-        prev = NULL;
-    }
-};
 
 Node* insertatHead(Node* head,int x){
     Node* temp = new Node(x);

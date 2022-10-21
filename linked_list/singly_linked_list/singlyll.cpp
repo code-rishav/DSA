@@ -55,12 +55,17 @@ class singlyll{
          return -1;
         temp->next = curr->next;
         curr->next = temp;
+        return 0;
     }
     int delhead(){
         if(head==NULL)
         return -1;
-        else if(tail==head)
-        head = NULL;
+        else if(tail==head){
+            delete head;
+            head = NULL;
+            tail = NULL;
+            return 0;
+        }
         else{
             Node *temp = head;
             delete head;
@@ -73,12 +78,21 @@ class singlyll{
     int deltail(){
         if(tail==NULL)
         return -1;
+        else if(tail==head){
+            delete head;
+            head = NULL;
+            tail = NULL;
+            return 0;
+        }
         else{
             Node* temp = head;
             while(temp->next->next!=NULL)
             temp = temp->next;
+
             delete temp->next;
             temp->next = NULL;
+            tail = temp;
+            return 0;
         }
     }
     void display(){

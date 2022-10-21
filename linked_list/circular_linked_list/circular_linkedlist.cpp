@@ -1,14 +1,6 @@
-#include <iostream>
+#include "NODE.cpp"
 using namespace std;
-class Node{
-    public:
-    int data;
-    Node* next;
-    Node(int x){
-        data = x;
-        next = NULL;
-    }
-};
+
 
     Node* insertatHead(Node* head,int x){
         Node* temp = new Node(x);

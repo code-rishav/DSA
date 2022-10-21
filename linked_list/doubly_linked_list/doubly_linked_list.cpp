@@ -1,6 +1,6 @@
 #ifndef DOUBLY_LINKEDLIST_CPP
 #define DOUBLY_LINKEDLIST_CPP
-#include <iostream>
+#include "NODE2.cpp"
 using namespace std;
 class Node{
     public:
