@@ -46,7 +46,7 @@ class Queue{
 
     void print(){
         int i;
-        for(i=0;i<size;i++)
+        for(i=front;i<size;i++)
         cout<<q[i]<<' ';
         cout<<endl;
     }

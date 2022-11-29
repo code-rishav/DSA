@@ -51,10 +51,10 @@ class postfix{
                 s.push(ch);
                 else{
                  for(int j=0;j<4;j++){
-                        if(s.topE()==ar[i])
-                        i1 = i;
-                        if(ch==ar[i])
-                        i2 = i;
+                        if(s.topE()==ar[j])
+                        i1 = j;
+                        if(ch==ar[j])
+                        i2 = j;
                      }
                 
                     if(i2>i1){

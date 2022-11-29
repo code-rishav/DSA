@@ -1,5 +1,6 @@
 #include <iostream>
 #include <queue>
+#include <stack>
 using namespace std;
 class Node{
     public:
@@ -8,7 +9,7 @@ class Node{
     Node *right;
 
     Node(){
-        data = NULL;
+        data = INT_MIN;
         left = NULL;
         right = NULL;
     }
@@ -18,6 +19,37 @@ class Node{
         right = NULL;
     }
 };
+
+Node* insert(Node* root,int x){
+        Node* ele = new Node(x);
+        if(root==NULL){
+            root = ele;
+            return root;
+        }
+        Node* curr = root;
+        while(curr!=NULL){
+            if(x<curr->data){
+                if(curr->left==NULL){
+                    curr->left = ele;
+                    return root;
+                }
+                else
+                curr = curr->left;
+            }
+            else if(x>curr->data){
+                if(curr->right==NULL){
+                    curr->right = ele;
+                    return root;
+                }
+                else
+                curr = curr->right;
+            }
+            else
+            return root;
+        }
+        return root;
+}
+
 void inorder(Node* root){
     if(root!=NULL){
         inorder(root->left);
@@ -112,4 +144,210 @@ void printlevelline2(Node* root){
         }
         cout<<"\n";
     }
+}
+
+int count(Node* root){
+    if(root==NULL)
+    return 0;
+    else{
+        return 1+count(root->left)+count(root->right);
+    }
+}
+
+int getmax(Node* root){
+    if(root==NULL)
+    return INT16_MIN;
+    else
+    return max(root->data,max(getmax(root->left),getmax(root->right)));
+}
+
+int maxlevel;
+void leftview(Node* root,int level){
+    if(root==NULL)
+    return;
+    if(maxlevel<level){
+        cout<<root->data;
+        maxlevel = level;
+    } 
+    leftview(root->left,level+1);
+    leftview(root->right,level+1);
+}
+
+void leftview_loop(Node* root){
+    if(root==NULL)
+    return;
+    queue<Node*>q;
+    q.push(root);
+    while(q.empty()==false){
+        int count = q.size();
+        for(int i=0;i<count;i++){
+            Node* curr = q.front();
+            q.pop();
+            if(i==1)
+            cout<<curr->data<<" ";
+            if(curr->left!=NULL)
+            q.push(curr->left);
+            if(curr->right!=NULL)
+            q.push(curr->right);
+        }
+    }
+}
+
+bool childsum(Node* root){
+    if(root==NULL)
+    return true;
+    if(root->left==NULL && root->right==NULL)
+    return true;
+    int sum=0;
+    if(root->left!=NULL)
+    sum+=root->left->data;
+    if(root->right!=NULL)
+    sum+=root->right->data;
+    return (root->data==sum && childsum(root->left) && childsum(root->right));
+}
+
+bool isbalanced1(Node* root){
+    if(root==NULL) return true;
+    int lh = height(root->left);
+    int rh = height(root->right);
+    return (abs(lh-rh)<=1 && isbalanced1(root->left) && isbalanced1(root->right));
+}
+
+int isbalanced2(Node* root){
+    if(root==NULL) return 0;
+    int lh = isbalanced2(root->left);
+    if(lh==-1) return -1;
+    int rh = isbalanced2(root->right);
+    if(rh==-1) return -1;
+    if(abs(lh-rh)>1) return -1;
+    else
+    return max(lh,rh)+1;
+}
+
+int maxWidth(Node* root){
+    if(root==NULL) return 0;
+    int res = 0;
+    queue<Node*>q;
+    q.push(root);
+    while(q.empty()==false){
+        int count = q.size();
+        res = max(res,count);
+        for(int i=0;i<q.size();i++){
+            Node* curr = q.front();
+            q.pop();
+            if(curr->left!=NULL)q.push(curr->left);
+            if(curr->right!=NULL)q.push(curr->right);
+        }
+    }
+    return res;
+}
+
+Node* BTtoDLL(Node* root){
+    if(root==NULL) return root;
+    static Node* prev = NULL;
+    Node* head = BTtoDLL(root->left);
+    if(prev==NULL)
+    head = root;
+    else{
+        root->left = prev;
+        prev->right = root;
+    }
+    prev = root;
+    BTtoDLL(root->right);
+    return head;
+}
+
+Node* construct(int in[],int pre[]){
+    int pivot;
+    Node* root = new Node(pre[0]);
+    pivot = find_p(in,root->data);
+
+}
+
+int find_p(int ar[],int ele){
+    int size = sizeof(ar)/sizeof(int);
+    for(int i=0;i<size;i++){
+        if(ar[i]==ele)
+        return i;
+    }
+}
+
+void printspiral(Node* root){
+    if(root==NULL) return;
+    queue<Node*> q;
+    stack<int> s;
+    bool reverse = false;
+    q.push(root);
+    while(q.empty()==false){
+        int count = q.size();
+        for(int i=0;i<count;i++){
+            Node* curr = q.front();
+            q.pop();
+            if(reverse)
+            s.push(curr->data);
+            else
+            cout<<curr->data<<" ";
+
+            if(curr->left!=NULL)
+            q.push(curr->left);
+            if(curr->right!=NULL)
+            q.push(curr->right);     
+        }
+        if(reverse){
+            while(s.empty()==false){
+                cout<<s.top()<<" ";
+                s.pop();
+            }
+        }
+        reverse = !reverse;
+        cout<<endl;
+    }
+
+}
+
+void printspiral2(Node* root){
+    if(root==NULL) return;
+
+    stack<Node*>s1;
+    stack<Node*> s2;
+    s1.push(root);
+    while(s1.empty()==false || s2.empty()==false){
+        while(s1.empty()==false){
+            Node* temp = s1.top();
+            s1.pop();
+            cout<<temp->data<<" ";
+            if(temp->left!=NULL)
+            s2.push(temp->left);
+            if(temp->right!=NULL)
+            s2.push(temp->right);
+        }
+        while(s2.empty()==false){
+            Node* temp2 = s2.top();
+            s2.pop();
+            cout<<temp2->data<<" ";
+            if(temp2->right!=NULL)
+            s2.push(temp2->right);
+            if(temp2->left!=NULL)
+            s2.push(temp2->left);
+        }
+        cout<<endl;
+    }
+
+}
+
+int res=0;
+int diameter2(Node* root){
+    if(root==NULL) return 0;
+    int lh = diameter2(root->left);
+    int rh = diameter2(root->right);
+    res = max(res,1+lh+rh);
+    return 1+max(lh,rh);
+}
+
+int diameter1(Node* root){
+    if(root==NULL) return 0;
+    int d1 = 1+height(root->left)+height(root->right);
+    int d2 = diameter1(root->left);
+    int d3 = diameter1(root->right);
+    return max(d1,max(d2,d3));
 }
