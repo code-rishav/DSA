@@ -344,10 +344,33 @@ int diameter2(Node* root){
     return 1+max(lh,rh);
 }
 
+int delete(int x){
+    
+}
+
 int diameter1(Node* root){
     if(root==NULL) return 0;
     int d1 = 1+height(root->left)+height(root->right);
     int d2 = diameter1(root->left);
     int d3 = diameter1(root->right);
     return max(d1,max(d2,d3));
+}
+
+bool path(Node* root,int n,vector<Node*> v){
+    if(root==NULL) return false;
+    if(root->data==n) return true;
+    if(path(root->left,n,v)==false || path(root->right,n,v)==false) 
+    return false;
+    v.pop_back();
+    return false;
+}
+
+Node* lca(Node* root,int n1,int n2){
+    vector<Node*> path1,path2;
+    if(path(root,n1,path1)==false||path(root,n2,path2)==false) return NULL;
+    for(int i=0;i<path1.size()-1;i++){
+        if(path1[i+1]==path2[i+1])
+        return path1[i];
+    }
+    return NULL;
 }
