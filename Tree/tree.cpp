@@ -1,6 +1,7 @@
 #include <iostream>
 #include <queue>
 #include <stack>
+#include <cmath>
 using namespace std;
 class Node{
     public:
@@ -344,10 +345,6 @@ int diameter2(Node* root){
     return 1+max(lh,rh);
 }
 
-int delete(int x){
-    
-}
-
 int diameter1(Node* root){
     if(root==NULL) return 0;
     int d1 = 1+height(root->left)+height(root->right);
@@ -365,7 +362,7 @@ bool path(Node* root,int n,vector<Node*> v){
     return false;
 }
 
-Node* lca(Node* root,int n1,int n2){
+Node* lca1(Node* root,int n1,int n2){
     vector<Node*> path1,path2;
     if(path(root,n1,path1)==false||path(root,n2,path2)==false) return NULL;
     for(int i=0;i<path1.size()-1;i++){
@@ -373,4 +370,66 @@ Node* lca(Node* root,int n1,int n2){
         return path1[i];
     }
     return NULL;
+}
+
+Node* lca2(Node* root,int n1,int n2){
+    if(root==NULL) return NULL;
+    if(root->data==n1||root->data==n2) return root;
+
+    Node* lca_1 = lca2(root->left,n1,n2);
+    Node* lca_2 = lca2(root->right,n1,n2);
+
+    if(lca_1!=NULL && lca_2!=NULL)
+        return root;
+    if(lca_1!=NULL)
+        return lca_1;
+    else
+        return lca_2;
+}
+
+int countNodes(Node* root){
+    if(root==NULL)
+    return 0;
+    int lh=0,rh=0;
+    Node* curr = root;
+    while(curr!=NULL){
+        lh++;
+        curr = curr->left;
+    }
+    curr = root;
+    while(curr!=NULL){
+        rh++;
+        curr = curr->right;
+    }
+    if(lh==rh)
+    return pow(2,lh)-1;
+    else
+    return 1+ countNodes(root->left)+countNodes(root->right);
+}
+
+void serialise(Node* root, vector<int>&arr){
+    if(root==NULL){
+        arr.push_back(-1);
+        return;
+    }
+    arr.push_back(root->data);
+    serialise(root->left,arr);
+    serialise(root->right,arr);
+    return;
+}
+
+//value of index is passed as 0 initially
+Node* deserialise(vector<int> &arr,int index){
+    if(index==arr.size())
+    return NULL;
+
+    int val = arr[index];
+    index++;
+    if(val==-1)
+    return NULL;
+
+    Node *root = new Node(val);
+    root->left = deserialise(arr,index);
+    root->right = deserialise(arr,index);
+    return root;
 }
